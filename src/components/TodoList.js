@@ -1,23 +1,16 @@
-import React from 'react';
-import TodoItem from './TodoItem';
+import React from "react";
+import TodoItem from "./TodoItem";
 
-const TodoList = ({ key,todos, handleEdit, handleDelete, handleToggle }) => {
+const TodoList = ({ todos, handleDelete, handleEdit, handleToggle }) => {
   return (
-    <div>
-      <ul className='allTodos'>
-        
-        {/* Map over todos and create a TodoItem component for each item */}
-        {todos.map((todo) => (
-          <TodoItem
-            key={key}
-            todo={todo}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-            handleToggle={handleToggle}
-          />
-        ))}
-      </ul>
-    </div>
+    <ul className="allTodos">
+        <TodoItem 
+        todos={todos}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+        handleToggle={handleToggle}
+        />
+    </ul>
   );
 };
 

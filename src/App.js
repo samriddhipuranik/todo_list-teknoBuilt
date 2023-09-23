@@ -66,12 +66,12 @@ const handleToggle = (id) => {
         Todo list
       </h1>
       <TodoForm 
+      key={todo.id}
       handleSubmit = {handleSubmit} 
       todo = {todo} 
       editId = {editId} 
       setTodo = {setTodo}/>
       <TodoList 
-      key={todo.id}
       todos = {todos} 
       handleEdit = {handleEdit} 
       handleDelete = {handleDelete}

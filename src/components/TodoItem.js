@@ -1,21 +1,22 @@
 import React from 'react';
 
-const TodoItem = ({ todo, handleEdit, handleDelete, handleToggle }) => {
-  const { id, todoText, completed } = todo;
+const TodoItem = ({todos, handleDelete, handleEdit, handleToggle}) => {
 
   return (
-    <li className={`singleTodo ${completed ? 'completed' : ''}`} key={id}>
-      <label>
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={() => handleToggle(id)}
-        />
-        <span className='todoText'>{todoText}</span>
-      </label>
-      <button onClick={() => handleEdit(id)}>Edit</button>
-      <button onClick={() => handleDelete(id)}>Delete</button>
-    </li>
+    todos.map((t) => (
+        <li className={`singleTodo ${t.completed ? "completed" : ""}`} key={t.id}>
+          <label>
+            <input
+              type="checkbox"
+              checked={t.completed}
+              onChange={() => handleToggle(t.id)} // Handle toggle here
+            />
+            <span className="todoText">{t.todo}</span>
+          </label>
+          <button onClick={() => handleEdit(t.id)}>Edit</button>
+          <button onClick={() => handleDelete(t.id)}>Delete</button>
+        </li>
+      ))
   );
 };
 
