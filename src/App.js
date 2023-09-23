@@ -14,6 +14,9 @@ const [editId, setEditId] = useState(0);
 const handleSubmit = (e)=>{
 // to not refresh 
 e.preventDefault();
+ console.log("todo:", todo);
+  console.log("editId:", editId);
+  console.log("todos:", todos);
 if(editId){
   const editTodo = todos.find((i) => i.id === editId);
   const updatedTodos = todos.map((t)=>t.id === editTodo.id? t = {id : t.id, todo} : {id : t.id, todo : t.todo});
@@ -23,9 +26,10 @@ if(editId){
   return;
 }
 if(todo !== ''){
+
   // making id unique
   // spread operator 
-  setTodos([{id: `${todo}-${Date.now()}`, todo}, ...todos]);
+  setTodos([{id: `${todo}-${Date.now()}`, todo, completed : false}, ...todos]);
   // now everytime we click on add - todo list will get updated 
   // we want the single state to be empty - after adding 
   setTodo("");
@@ -42,8 +46,19 @@ const handleEdit = (id)=>{
   // editTodo is an object which contains id and a todo so .todo 
   setTodo(editTodo.todo);
   setEditId(id);
+};
+// const handleToggle = (id)=>{
+//   const updatedTodos = todos.map((t)=> t.id !== id? t = {id : t, todo, completed} :{id : t.id, todo : t.todo, completed : !completed});
+//   setTodos(updatedTodos);
+// };
+const handleToggle = (id) => {
+  const updatedTodos = todos.map((t) =>
+    t.id !== id ? t : { ...t, completed: !t.completed }
+  );
+  setTodos(updatedTodos);
+  setTodo('');
+};
 
-}
   return (
     <div className='App'> 
     <div className='container'>
@@ -55,7 +70,12 @@ const handleEdit = (id)=>{
       todo = {todo} 
       editId = {editId} 
       setTodo = {setTodo}/>
-      <TodoList todos = {todos} handleEdit = {handleEdit} handleDelete = {handleDelete}/>
+      <TodoList 
+      key={todo.id}
+      todos = {todos} 
+      handleEdit = {handleEdit} 
+      handleDelete = {handleDelete}
+      handleToggle={handleToggle}/>
     </div>
     </div>
   )
