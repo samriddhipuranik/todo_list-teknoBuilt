@@ -1,22 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import './App.css';
+import axios from 'axios';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 
 const App = () => {
+  const [quote, setQuote] = useState('');
+
+  useEffect(() => {
+    axios
+      .get('https://api.quotable.io/random?tags=motivational')
+      .then((response) => {
+        const { content, author } = response.data;
+        setQuote(`${content} - ${author}`);
+      })
+      .catch((error) => {
+        console.error('Error fetching quote:', error);
+      });
+  }, []);
+
   // for single todo
-const [todo, setTodo] = useState("");
-// this is for all - its an array 
+const [todo, setTodo] = useState("")
+// for list of today ---> array
 const [todos, setTodos] = useState([]);
-// contains the id of variable that we need to edit 
 const [editId, setEditId] = useState(0);
 
 const handleSubmit = (e)=>{
-// to not refresh 
 e.preventDefault();
  console.log("todo:", todo);
   console.log("editId:", editId);
   console.log("todos:", todos);
+
 if(editId){
   const editTodo = todos.find((i) => i.id === editId);
   const updatedTodos = todos.map((t)=>t.id === editTodo.id? t = {id : t.id, todo} : {id : t.id, todo : t.todo});
@@ -25,14 +39,12 @@ if(editId){
   setTodo('');
   return;
 }
-if(todo !== ''){
 
-  // making id unique
-  // spread operator 
+if(todo.trim() !== ''){
   setTodos([{id: `${todo}-${Date.now()}`, todo, completed : false}, ...todos]);
-  // now everytime we click on add - todo list will get updated 
-  // we want the single state to be empty - after adding 
   setTodo("");
+}else{
+  alert("Enter some Task...!")
 }
 }
 const handleDelete = (id)=>{
@@ -41,16 +53,11 @@ const handleDelete = (id)=>{
 };
 
 const handleEdit = (id)=>{
-  // its going to return entire todo - id and object 
   const editTodo = todos.find((i) => i.id === id); 
-  // editTodo is an object which contains id and a todo so .todo 
   setTodo(editTodo.todo);
   setEditId(id);
 };
-// const handleToggle = (id)=>{
-//   const updatedTodos = todos.map((t)=> t.id !== id? t = {id : t, todo, completed} :{id : t.id, todo : t.todo, completed : !completed});
-//   setTodos(updatedTodos);
-// };
+
 const handleToggle = (id) => {
   const updatedTodos = todos.map((t) =>
     t.id !== id ? t : { ...t, completed: !t.completed }
@@ -63,7 +70,7 @@ const handleToggle = (id) => {
     <div className='App'> 
     <div className='container'>
       <h1>
-        Todo list
+        Todo List App
       </h1>
       <TodoForm 
       key={todo.id}
@@ -77,6 +84,9 @@ const handleToggle = (id) => {
       handleDelete = {handleDelete}
       handleToggle={handleToggle}/>
     </div>
+       <div className='footer'>
+          <p className='motivational-quote'> {quote}</p>
+        </div>
     </div>
   )
 }
