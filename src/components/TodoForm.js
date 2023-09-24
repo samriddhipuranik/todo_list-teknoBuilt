@@ -11,6 +11,7 @@ const TodoForm = ({ key, handleSubmit, todo, editId, setTodo }) => {
           value={todo}
           type="text"
           placeholder="Type your task here..."
+          
         />
         <button className = "add-btn"type="submit">{editId ? "Edit" : "Add"}</button>
       </form>
