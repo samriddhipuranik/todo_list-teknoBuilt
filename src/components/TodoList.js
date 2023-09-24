@@ -1,19 +1,28 @@
 import React from "react";
-import TodoItem from "./TodoItem";
 import '../App.css';
 
+const TodoItem = ({ todos, handleDelete, handleEdit, handleToggle }) => {
+  // Separate them so that complete task goes to the bottom
+  const completedTodos = todos.filter((t) => t.completed);
+  const incompleteTodos = todos.filter((t) => !t.completed);
 
-const TodoList = ({ todos, handleDelete, handleEdit, handleToggle }) => {
-  return (
-    <ul className="allTodos">
-      <TodoItem
-        todos={todos}
-        handleDelete={handleDelete}
-        handleEdit={handleEdit}
-        handleToggle={handleToggle}
-      />
-    </ul>
-  );
+  // Combine incomplete and completed todos with completed ones at the bottom
+  const combinedTodos = [...incompleteTodos, ...completedTodos];
+
+  return combinedTodos.map((t) => (
+    <li className={`singleTodo ${t.completed ? "completed" : ""}`} key={t.id}>
+      <label className="singleTodo">
+        <input
+          type="checkbox"
+          checked={t.completed}
+          onChange={() => handleToggle(t.id)} // Handle toggle
+        />
+      </label>
+      <span className={`singleTodo ${t.completed ? "completed" : ""}`}>{t.todo}</span>
+      <button className="eachTodo-btn" onClick={() => handleEdit(t.id)}>Edit</button>
+      <button className="eachTodo-btn" onClick={() => handleDelete(t.id)}>Delete</button>
+    </li>
+  ));
 };
 
-export default TodoList;
+export default TodoItem;
